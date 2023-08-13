@@ -8,3 +8,6 @@ bin
 *.llc
 *.avi
 *.mp4
+.vscode
+etc
+

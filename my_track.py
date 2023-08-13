@@ -3,9 +3,9 @@
 
 from functools import partial
 from pathlib import Path
+
 import cv2
 import PySimpleGUI as sg
-import numpy as np
 import torch
 
 from boxmot import TRACKERS
@@ -19,9 +19,7 @@ __tr.check_packages(('ultralytics @ git+https://github.com/mikel-brostrom/ultral
 
 from ultralytics import YOLO
 from ultralytics.data.utils import VID_FORMATS
-from ultralytics.utils.plotting import save_one_box
 
-from examples.utils import write_mot_results
 
 
 def on_predict_start(predictor, persist=False):
