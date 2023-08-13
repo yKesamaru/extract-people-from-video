@@ -38,9 +38,9 @@ https://pixabay.com/ja/
 ![](https://raw.githubusercontent.com/yKesamaru/extract-people-from-video/master/assets/original.gif)
 
 ## `DBSCAN`で人物の領域を抽出
-DBSCAN（Density-Based Spatial Clustering of Applications with Noise）は、密度ベースのクラスタリングアルゴリズムの1つで、学習を必要としない非教師学習のクラスタリングアルゴリズムです。
+DBSCAN（Density-Based Spatial Clustering of Applications with Noise）は、密度ベースのクラスタリングアルゴリズムの1つで、学習を必要としません。
 
-外観容姿の類似性に基づくDBSCANは、形状や外観の特徴を捉えてクラスタリングを行う強力な手法です。とくに画像分析やパターン認識の分野でよく使用されます。パラメーターεとMinPtsの選択は、クラスタリングの結果に大きく影響するため、適切な値の選定が重要です。
+外観容姿の類似性に基づくDBSCANは、形状や外観の特徴を捉えてクラスタリングを行う強力な手法です。とくに画像分析やパターン認識の分野でよく使用されます。パラメーターεとMinPtsの選択は、クラスタリングの結果に大きく影響します。
 
 ### 1. DBSCANの基本
 
@@ -172,7 +172,7 @@ window.close()
 ```
 
 ### 実行結果
-![](assets/dbscan_hog.gif)
+![](https://raw.githubusercontent.com/yKesamaru/extract-people-from-video/master/assets/dbscan_hog.gif)
 
 ## `SSD`で人物の領域を抽出
 SSD（Single Shot Multibox Detector）は、物体検出のための深層学習モデルの1つです。一度の推論で物体のクラスと位置を同時に検出するため、高速なアルゴリズムとして知られています。
@@ -268,7 +268,7 @@ window.close()
 ```
 
 ### 実行結果
-![](assets/ssd.gif)
+![](https://raw.githubusercontent.com/yKesamaru/extract-people-from-video/master/assets/ssd.gif)
 
 ## 考察
 今回は、DBSCANとSSDを使用して人物抽出を行いました。
