@@ -1,6 +1,6 @@
 # 人物抽出のためのコード比較その④-2: SSD
-## 前回のコード
-
+# 前回のコード
+[人物抽出のためのコード比較その④: DBSCAN, SSD](https://zenn.dev/ykesamaru/articles/4084a7074f3fe2)で紹介したSSD（Single Shot Multibox Detector）を実装したコードです。
 ```python
 import cv2
 import PySimpleGUI as sg
@@ -68,24 +68,25 @@ cv2.destroyAllWindows()
 window.close()
 ```
 
-### SSDのコードが極端に遅い理由の解明
+# SSDのコードが極端に遅い理由の解明
 
 最近、SSD（Single Shot Multibox Detector）のコードの実行速度が極端に遅いという問題に直面しました。この問題の原因を追求するために、私のシステムのライブラリとバージョンを調査しました。
 
-#### システムのバージョン
+## システムのバージョン
 - CUDA: 12.0
 - cuDNN: 8
 
-#### Pythonライブラリのバージョン
+## Pythonライブラリのバージョン
 ```bash
 tensorboard==2.11.2
 tensorflow==2.13.0
 tensorflow-gpu==2.5.0
 ```
 
-#### 問題の原因
+## 問題の原因
 
-調べた結果、問題の根本的な原因が明らかになりました。私の環境ではCUDA 12.0を使用しているのに対し、TensorFlow 2.5はCUDA 11.0との互換性しかありません。このバージョンの不整合ゆえにGPUが使用できずにCPUでの推論が行われていたため、SSDの実行速度が極端に遅くなっていた、という話でした。
+問題の根本的な原因が明らかになりました。
+私の環境ではCUDA 12.0を使用しているのに対し、TensorFlow 2.5はCUDA 11.0との互換性しかありません。このバージョンの不整合ゆえにGPUが使用できずにCPUでの推論が行われていたため、SSDの実行速度が極端に遅くなっていた、という話でした。
 ときに、深層学習のフレームワークとGPUライブラリの間の互換性は、パフォーマンスに大きな影響を及ぼすことがあるため、要注意です。
 
 それでは、と、tensorflow 1.5のインストールを試みましたが、こちらはPython 3.7までしか対応していないということがわかりました。私の環境ではPython 3.8を使用しているため、tensorflow 1.5を使用することはできませんでした。
@@ -99,6 +100,7 @@ tensorflow-gpu==2.5.0
 https://github.com/qfgaohao/pytorch-ssd/tree/master
 
 事前学習済みモデルを用意してくれていて、なおかつMITライセンスの、ありがたいリポジトリです。
+このリポジトリをクローンし、新たに次のコードを追加します。
 
 ```python
 import sys
@@ -153,7 +155,21 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
-
-
-
 ```
+
+また、そのままではどうやらCPUで処理しようとするので、`predictor.py`を以下のように変更します。
+```diff
+ def predict(self, image, top_k=-1, prob_threshold=None):
+     cpu_device = torch.device("cpu")
+     height, width, _ = image.shape
+     image = self.transform(image)  # 画像の変換
++    image = image.to(self.device)  # デバイスに移動
+     images = image.unsqueeze(0)
+     images = images.to(self.device)
+     with torch.no_grad():
+```
+
+# 実行結果
+![](assets/ssd_pytorch.gif)
+
+まずまずの処理速度になりました。
