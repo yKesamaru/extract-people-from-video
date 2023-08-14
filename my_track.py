@@ -1,8 +1,11 @@
 # Mikel Broström 🔥 Yolo Tracking 🧾 AGPL-3.0 license
 # yKesamaru added and updated the code.
 
+import sys
 from functools import partial
 from pathlib import Path
+
+sys.path.append('/usr/lib/python3/dist-packages')
 
 import cv2
 import PySimpleGUI as sg
@@ -19,7 +22,6 @@ __tr.check_packages(('ultralytics @ git+https://github.com/mikel-brostrom/ultral
 
 from ultralytics import YOLO
 from ultralytics.data.utils import VID_FORMATS
-
 
 
 def on_predict_start(predictor, persist=False):

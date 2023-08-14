@@ -12,6 +12,8 @@ https://zenn.dev/ykesamaru/articles/6cb451f8fd1740
 
 https://zenn.dev/ykesamaru/articles/36ff6507616e9b
 
+https://zenn.dev/ykesamaru/articles/4084a7074f3fe2
+
 今回のキーワードは`DBSCAN`と`SSD`です。
 
 前回の最後にご紹介した「[人物再同定に基づく段階的クラスタリングを用いた複数人物追跡](https://proceedings-of-deim.github.io/DEIM2022/papers/C41-5.pdf)」の調査として、論文内で採用されている`DBSCAN`を実装し、その使用感を確かめます。また、YOLOに対して代替となる候補として`SSD`を使用してみます。

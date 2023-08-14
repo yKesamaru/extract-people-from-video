@@ -1,4 +1,38 @@
-# 人物抽出のためのコード比較その④-2: SSD
+# はじめに
+
+人物抽出は、画像や動画から特定の人物を背景から分離する技術です。
+AR（拡張現実）やVR（仮想現実）のようなアプリケーションでよく使用されます。
+
+今回は前回の記事で実装したSSD（Single Shot Multibox Detector）の実行速度に問題があったので、pytorchで再実装して処理速度を改善しました。
+
+関連記事
+https://zenn.dev/ykesamaru/articles/e0380990465d34
+
+https://zenn.dev/ykesamaru/articles/6cb451f8fd1740
+
+https://zenn.dev/ykesamaru/articles/36ff6507616e9b
+
+https://zenn.dev/ykesamaru/articles/4084a7074f3fe2
+
+# 環境
+```bash
+Python 3.8.10
+(FACE01) 
+$ inxi -SCGxx --filter
+System:    Kernel: 5.15.0-46-generic x86_64 bits: 64 compiler: N/A Desktop: Unity wm: gnome-shell dm: GDM3 
+           Distro: Ubuntu 20.04.4 LTS (Focal Fossa) 
+CPU:       Topology: Quad Core model: AMD Ryzen 5 1400 bits: 64 type: MT MCP arch: Zen rev: 1 L2 cache: 2048 KiB 
+Graphics:  Device-1: NVIDIA TU116 [GeForce GTX 1660 Ti] vendor: Micro-Star MSI driver: nvidia v: 515.65.01 bus ID: 08:00.0 
+```
+
+
+# 元動画
+
+https://pixabay.com/ja/
+
+![](https://raw.githubusercontent.com/yKesamaru/extract-people-from-video/master/assets/original.gif)
+
+
 # 前回のコード
 [人物抽出のためのコード比較その④: DBSCAN, SSD](https://zenn.dev/ykesamaru/articles/4084a7074f3fe2)で紹介したSSD（Single Shot Multibox Detector）を実装したコードです。
 ```python
@@ -70,7 +104,7 @@ window.close()
 
 # SSDのコードが極端に遅い理由の解明
 
-最近、SSD（Single Shot Multibox Detector）のコードの実行速度が極端に遅いという問題に直面しました。この問題の原因を追求するために、私のシステムのライブラリとバージョンを調査しました。
+SSD（Single Shot Multibox Detector）のコードの実行速度が極端に遅いという問題に直面しました。この問題の原因を追求するために、私のシステムのライブラリとバージョンを調査しました。
 
 ## システムのバージョン
 - CUDA: 12.0
@@ -85,7 +119,7 @@ tensorflow-gpu==2.5.0
 
 ## 問題の原因
 
-問題の根本的な原因が明らかになりました。
+問題の根本的な原因が分かりました。
 私の環境ではCUDA 12.0を使用しているのに対し、TensorFlow 2.5はCUDA 11.0との互換性しかありません。このバージョンの不整合ゆえにGPUが使用できずにCPUでの推論が行われていたため、SSDの実行速度が極端に遅くなっていた、という話でした。
 ときに、深層学習のフレームワークとGPUライブラリの間の互換性は、パフォーマンスに大きな影響を及ぼすことがあるため、要注意です。
 
@@ -170,6 +204,6 @@ cv2.destroyAllWindows()
 ```
 
 # 実行結果
-![](assets/ssd_pytorch.gif)
+![](https://raw.githubusercontent.com/yKesamaru/extract-people-from-video/master/assets/ssd_pytorch.gif)
 
 まずまずの処理速度になりました。
